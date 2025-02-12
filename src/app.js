@@ -4,7 +4,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const logger = require("./middleware/logger");
-const connectDB = require("./utils/connectDB");
+const { connectDB, imageCollection } = require("./utils/connectDB");
 const getImageBuffer = require("./utils/ai/getImageBuffer");
 const generateImageURL = require("./utils/ai/generateImageURL");
 
@@ -30,11 +30,26 @@ app.post("/create-image", async (req, res) => {
 
     // 3: upload image and get url
     const data = await generateImageURL(buffer, prompt);
-    console.log(data);
 
-    res.send(data);
     // 4: insert data in mongoDB
-    // 5:
+    const document = {
+      email,
+      prompt,
+      username,
+      userImg,
+      category,
+      thumb_img: data.data.thumb.url,
+      medium_img: data.data.medium.url,
+      original_img: data.data.url,
+
+      createdAt: new Date().toISOString(),
+    };
+
+    const result = await imageCollection.insertOne(document);
+
+    // 5: send response
+
+    res.send({ ...result, url: document.original_img });
   } catch (err) {
     console.log(err);
     res.status(500).send(err);

@@ -19,7 +19,7 @@ app.post("/create-image", async (req, res) => {
   if (!email || !prompt || !username || !userImg || !category) {
     res.status(400).send({
       status: 400,
-      message: "please provide email, prompt, username, userImg, category",
+      message: "please provide an email, prompt, username, userImg and category",
     });
 
     // 1 + 2: create a prompt & generate image buffer

@@ -1,6 +1,7 @@
 const generateImageURL = require("../utils/ai/generateImageURL");
 const getImageBuffer = require("../utils/ai/getImageBuffer");
 const { imageCollection } = require("../utils/connectDB");
+const { ObjectId } = require("mongodb");
 
 const insertAiImage = async (req, res) => {
   const { email, prompt, username, userImg, category } = req.body;
@@ -60,6 +61,23 @@ const getAllImage = async (req, res) => {
     res.status(500).send(err);
   }
 };
+const getSingleImage = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (id.length !== 24) {
+      res.status(400).send({
+        status: 400,
+        message: "please provide valid ID",
+      });
+      return;
+    }
+    const result = await imageCollection.findOne({ _id: new ObjectId(id) });
 
+    res.send(result);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err);
+  }
+};
 
-module.exports = { insertAiImage, getAllImage };
+module.exports = { insertAiImage, getAllImage, getSingleImage };

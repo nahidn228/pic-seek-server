@@ -1,8 +1,8 @@
-const generateAiReply = require("../utils/ai/generateAiReply");
+const { generateAiReply } = require("../utils/ai/generateAiReply");
 const { commentsCollection } = require("../utils/connectDB");
 
 const postUserComment = async (req, res) => {
-  const { imageId, prompt, comment, email } = req.body();
+  const { imageId, prompt, comment, email } = req.body;
   if (!imageId || !prompt || !email) {
     res.status(400).send({
       status: 400,

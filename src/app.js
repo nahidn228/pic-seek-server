@@ -18,7 +18,7 @@ app.use(logger);
 //routes
 app.use("/api/v1/image", imageRouter);
 app.use("/api/v1/comment", commentRouter);
-app.use("/api/v1/chat", commentRouter);
+
 
 //MOdel
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });

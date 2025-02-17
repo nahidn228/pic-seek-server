@@ -25,16 +25,13 @@ const postUserComment = async (req, res) => {
 
 const getUserComment = async (req, res) => {
   try {
-    const { id } = req.params;
-    if (id.length !== 24) {
-      res.status(400).send({
-        status: 400,
-        message: "please provide valid ID",
-      });
-      return;
-    }
-    const result = await commentsCollection.findOne({ _id: new ObjectId(id) });
-
+    const result = await commentsCollection
+      .find()
+      .project({
+        comment: 1,
+        reply: 1,
+      })
+      .toArray();
     res.send(result);
   } catch (err) {
     console.log(err);
@@ -42,4 +39,17 @@ const getUserComment = async (req, res) => {
   }
 };
 
-module.exports = { postUserComment, getUserComment };
+const getSingleUserComment = async (req, res) => {
+  try {
+    const { email, imageId } = req.params;
+    const filter = { email: email, imageId: imageId };
+
+    const result = await commentsCollection.find(filter).toArray();
+    res.send(result);
+  } catch (error) {
+    console.log(err);
+    res.status(500).send(err);
+  }
+};
+
+module.exports = { postUserComment, getUserComment, getSingleUserComment };

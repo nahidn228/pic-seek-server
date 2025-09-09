@@ -19,14 +19,16 @@ app.use(logger);
 app.use("/api/v1/image", imageRouter);
 app.use("/api/v1/comment", commentRouter);
 
-
 //MOdel
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 //playground
 
 app.get("/", (req, res) => {
-  res.send("🏹 Hello World!");
+  res.send({
+    success: true,
+    message: "🏹 This is PIC-SEEK AI Server 🐦‍🔥",
+  });
 });
 
 app.get("/chat", async (req, res) => {
